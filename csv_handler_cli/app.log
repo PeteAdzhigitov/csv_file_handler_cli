@@ -1,0 +1,27 @@
+2025-06-19 16:08 - INFO - None
+2025-06-19 16:08 - INFO - [Params(name='iphone 1 pro', brand='apple', price=999, rating=4.9), Params(name='galaxy s23 ultra', brand='samsung', price=2199, rating=4.8), Params(name='poco x5 pro', brand='xiaomi', price=299, rating=4.4)]
+2025-06-19 16:08 - INFO - | name             | brand   |   price |   rating |
+|------------------|---------|---------|----------|
+| iphone 1 pro     | apple   |     999 |      4.9 |
+| galaxy s23 ultra | samsung |    2199 |      4.8 |
+| poco x5 pro      | xiaomi  |     299 |      4.4 |
+2025-06-19 16:08 - INFO - None
+2025-06-19 16:08 - INFO - [Params(name='iphone 1 pro', brand='apple', price=999, rating=4.9), Params(name='galaxy s23 ultra', brand='samsung', price=2199, rating=4.8), Params(name='poco x5 pro', brand='xiaomi', price=299, rating=4.4)]
+2025-06-19 16:10 - INFO - wrapper - None
+2025-06-19 16:10 - INFO - wrapper - [Params(name='iphone 1 pro', brand='apple', price=999, rating=4.9), Params(name='galaxy s23 ultra', brand='samsung', price=2199, rating=4.8), Params(name='poco x5 pro', brand='xiaomi', price=299, rating=4.4)]
+2025-06-19 16:10 - INFO - wrapper - arguments_error_validation
+2025-06-19 16:10 - INFO - wrapper - main_file_handler
+2025-06-19 16:11 - INFO - wrapper - arguments_error_validation was envoked with result = None
+2025-06-19 16:11 - INFO - wrapper - main_file_handler was envoked with result = [Params(name='iphone 1 pro', brand='apple', price=999, rating=4.9), Params(name='galaxy s23 ultra', brand='samsung', price=2199, rating=4.8), Params(name='poco x5 pro', brand='xiaomi', price=299, rating=4.4)]
+2025-06-19 16:13 - INFO - wrapper - arguments_error_validation envoked with parameters (Namespace(file='products.csv', where='price>199', aggregate=None, order_by=None),){} result = None
+2025-06-19 16:13 - INFO - wrapper - main_file_handler envoked with parameters (PosixPath('products.csv'), Namespace(file='products.csv', where='price>199', aggregate=None, order_by=None)){} result = [Params(name='iphone 1 pro', brand='apple', price=999, rating=4.9), Params(name='galaxy s23 ultra', brand='samsung', price=2199, rating=4.8), Params(name='poco x5 pro', brand='xiaomi', price=299, rating=4.4)]
+2025-06-19 16:14 - INFO - wrapper - arguments_error_validation envoked with parameters positional arguments (Namespace(file='products.csv', where='price>199', aggregate=None, order_by=None),) and keyword arguments {}. Result = None
+2025-06-19 16:14 - INFO - wrapper - main_file_handler envoked with parameters positional arguments (PosixPath('products.csv'), Namespace(file='products.csv', where='price>199', aggregate=None, order_by=None)) and keyword arguments {}. Result = [Params(name='iphone 1 pro', brand='apple', price=999, rating=4.9), Params(name='galaxy s23 ultra', brand='samsung', price=2199, rating=4.8), Params(name='poco x5 pro', brand='xiaomi', price=299, rating=4.4)]
+2025-06-19 16:14 - INFO - wrapper - arguments_error_validation invoked with parameters positional arguments (Namespace(file='products.csv', where='price>199', aggregate=None, order_by=None),) and keyword arguments {}. Result = None
+2025-06-19 16:14 - INFO - wrapper - main_file_handler invoked with parameters positional arguments (PosixPath('products.csv'), Namespace(file='products.csv', where='price>199', aggregate=None, order_by=None)) and keyword arguments {}. Result = [Params(name='iphone 1 pro', brand='apple', price=999, rating=4.9), Params(name='galaxy s23 ultra', brand='samsung', price=2199, rating=4.8), Params(name='poco x5 pro', brand='xiaomi', price=299, rating=4.4)]
+2025-06-19 16:58 - INFO - wrapper - arguments_error_validation invoked with parameters positional arguments (Namespace(file='products.csv', where=None, aggregate=None, order_by=None),) and keyword arguments {}. Result = None
+2025-06-19 16:58 - INFO - wrapper - main_file_handler invoked with parameters positional arguments (PosixPath('products.csv'), Namespace(file='products.csv', where=None, aggregate=None, order_by=None)) and keyword arguments {}. Result = [Params(name='iphone 1 pro', brand='apple', price=999, rating=4.9), Params(name='galaxy s23 ultra', brand='samsung', price=2199, rating=4.8), Params(name='redmi note 12', brand='xiaomi', price=199, rating=4.6), Params(name='poco x5 pro', brand='xiaomi', price=299, rating=4.4)]
+2025-06-19 16:58 - INFO - wrapper - arguments_error_validation invoked with parameters positional arguments (Namespace(file='products.csv', where='rating<4.3', aggregate=None, order_by=None),) and keyword arguments {}. Result = None
+2025-06-19 16:58 - INFO - wrapper - main_file_handler invoked with parameters positional arguments (PosixPath('products.csv'), Namespace(file='products.csv', where='rating<4.3', aggregate=None, order_by=None)) and keyword arguments {}. Result = []
+2025-06-19 16:58 - INFO - wrapper - arguments_error_validation invoked with parameters positional arguments (Namespace(file='products.csv', where='rating<4.9', aggregate=None, order_by=None),) and keyword arguments {}. Result = None
+2025-06-19 16:58 - INFO - wrapper - main_file_handler invoked with parameters positional arguments (PosixPath('products.csv'), Namespace(file='products.csv', where='rating<4.9', aggregate=None, order_by=None)) and keyword arguments {}. Result = [Params(name='galaxy s23 ultra', brand='samsung', price=2199, rating=4.8), Params(name='redmi note 12', brand='xiaomi', price=199, rating=4.6), Params(name='poco x5 pro', brand='xiaomi', price=299, rating=4.4)]
