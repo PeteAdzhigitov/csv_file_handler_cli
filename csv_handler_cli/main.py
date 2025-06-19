@@ -89,7 +89,6 @@ if __name__ == '__main__':
     parser.add_argument('--aggregate', help='aggregating price or rating flag')
     parser.add_argument('--order-by', help='ordering output by a field')
     parser_arguments = parser.parse_args()
-    print(parser_arguments)
     arguments_error_validation(parser_arguments)
     csv_file_path = Path(parser_arguments.file)
     main()
