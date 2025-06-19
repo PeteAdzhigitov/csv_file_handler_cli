@@ -1,12 +1,14 @@
 import argparse
 from argparse import Namespace
 import csv
-from pathlib import Path
 from collections import namedtuple
 from tabulate import tabulate
 import tabulate
-from utils import operator_map, prepare_args
-from utils import logger_decorator
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent))
+from csv_handler_cli.utils import operator_map, prepare_args
+from csv_handler_cli.utils import logger_decorator
 
 headers = None
 

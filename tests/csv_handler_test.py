@@ -1,8 +1,7 @@
 import random
 
 import pytest
-
-from csv_handler_cli.conf import PROJECT_ROOT
+from conf import PROJECT_ROOT
 from csv_handler_cli.main import main_file_handler, arguments_error_validation
 
 
@@ -34,4 +33,3 @@ class TestCSVHandler:
         with pytest.raises(Exception) as exc_info:
             arguments_error_validation(parser_arguments)
         assert exc_info.type == Exception
-
