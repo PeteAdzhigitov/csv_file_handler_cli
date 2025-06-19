@@ -34,3 +34,43 @@ None
 | galaxy s23 ultra | samsung |    2199 |      4.8 |
 | redmi note 12    | xiaomi  |     199 |      4.6 |
 | poco x5 pro      | xiaomi  |     299 |      4.4 |
+2025-06-19 19:32 - INFO - wrapper - arguments_error_validation invoked with parameters positional arguments (Namespace(file='products.csv', where=None, aggregate='rating>avg', order_by=None),) and keyword arguments {}. Result = 
+None
+2025-06-19 19:32 - INFO - wrapper - prepare_data invoked with parameters positional arguments (PosixPath('products.csv'),) and keyword arguments {}. Result = 
+[Params(name='iphone 1 pro', brand='apple', price=999, rating=4.9), Params(name='galaxy s23 ultra', brand='samsung', price=2199, rating=4.8), Params(name='redmi note 12', brand='xiaomi', price=199, rating=4.6), Params(name='poco x5 pro', brand='xiaomi', price=299, rating=4.4)]
+2025-06-19 19:32 - INFO - wrapper - main_file_handler invoked with parameters positional arguments ([Params(name='iphone 1 pro', brand='apple', price=999, rating=4.9), Params(name='galaxy s23 ultra', brand='samsung', price=2199, rating=4.8), Params(name='redmi note 12', brand='xiaomi', price=199, rating=4.6), Params(name='poco x5 pro', brand='xiaomi', price=299, rating=4.4)], Namespace(file='products.csv', where=None, aggregate='rating>avg', order_by=None)) and keyword arguments {}. Result = 
+[[4.0]]
+2025-06-19 19:32 - INFO - wrapper - order_by_and_pretify invoked with parameters positional arguments ([[4.0]], Namespace(file='products.csv', where=None, aggregate='rating>avg', order_by=None), ['name', 'brand', 'price', 'rating']) and keyword arguments {}. Result = 
+|   rating |
+|----------|
+|        4 |
+2025-06-19 19:32 - INFO - wrapper - arguments_error_validation invoked with parameters positional arguments (Namespace(file='products.csv', where=None, aggregate='rating=avg', order_by=None),) and keyword arguments {}. Result = 
+None
+2025-06-19 19:32 - INFO - wrapper - prepare_data invoked with parameters positional arguments (PosixPath('products.csv'),) and keyword arguments {}. Result = 
+[Params(name='iphone 1 pro', brand='apple', price=999, rating=4.9), Params(name='galaxy s23 ultra', brand='samsung', price=2199, rating=4.8), Params(name='redmi note 12', brand='xiaomi', price=199, rating=4.6), Params(name='poco x5 pro', brand='xiaomi', price=299, rating=4.4)]
+2025-06-19 19:32 - INFO - wrapper - main_file_handler invoked with parameters positional arguments ([Params(name='iphone 1 pro', brand='apple', price=999, rating=4.9), Params(name='galaxy s23 ultra', brand='samsung', price=2199, rating=4.8), Params(name='redmi note 12', brand='xiaomi', price=199, rating=4.6), Params(name='poco x5 pro', brand='xiaomi', price=299, rating=4.4)], Namespace(file='products.csv', where=None, aggregate='rating=avg', order_by=None)) and keyword arguments {}. Result = 
+[[4.0]]
+2025-06-19 19:32 - INFO - wrapper - order_by_and_pretify invoked with parameters positional arguments ([[4.0]], Namespace(file='products.csv', where=None, aggregate='rating=avg', order_by=None), ['name', 'brand', 'price', 'rating']) and keyword arguments {}. Result = 
+|   rating |
+|----------|
+|        4 |
+2025-06-19 19:32 - INFO - wrapper - arguments_error_validation invoked with parameters positional arguments (Namespace(file='products.csv', where=None, aggregate='rating>min', order_by=None),) and keyword arguments {}. Result = 
+None
+2025-06-19 19:32 - INFO - wrapper - prepare_data invoked with parameters positional arguments (PosixPath('products.csv'),) and keyword arguments {}. Result = 
+[Params(name='iphone 1 pro', brand='apple', price=999, rating=4.9), Params(name='galaxy s23 ultra', brand='samsung', price=2199, rating=4.8), Params(name='redmi note 12', brand='xiaomi', price=199, rating=4.6), Params(name='poco x5 pro', brand='xiaomi', price=299, rating=4.4)]
+2025-06-19 19:32 - INFO - wrapper - main_file_handler invoked with parameters positional arguments ([Params(name='iphone 1 pro', brand='apple', price=999, rating=4.9), Params(name='galaxy s23 ultra', brand='samsung', price=2199, rating=4.8), Params(name='redmi note 12', brand='xiaomi', price=199, rating=4.6), Params(name='poco x5 pro', brand='xiaomi', price=299, rating=4.4)], Namespace(file='products.csv', where=None, aggregate='rating>min', order_by=None)) and keyword arguments {}. Result = 
+[[4.4]]
+2025-06-19 19:32 - INFO - wrapper - order_by_and_pretify invoked with parameters positional arguments ([[4.4]], Namespace(file='products.csv', where=None, aggregate='rating>min', order_by=None), ['name', 'brand', 'price', 'rating']) and keyword arguments {}. Result = 
+|   rating |
+|----------|
+|      4.4 |
+2025-06-19 19:33 - INFO - wrapper - arguments_error_validation invoked with parameters positional arguments (Namespace(file='products.csv', where=None, aggregate='rating=min', order_by=None),) and keyword arguments {}. Result = 
+None
+2025-06-19 19:33 - INFO - wrapper - prepare_data invoked with parameters positional arguments (PosixPath('products.csv'),) and keyword arguments {}. Result = 
+[Params(name='iphone 1 pro', brand='apple', price=999, rating=4.9), Params(name='galaxy s23 ultra', brand='samsung', price=2199, rating=4.8), Params(name='redmi note 12', brand='xiaomi', price=199, rating=4.6), Params(name='poco x5 pro', brand='xiaomi', price=299, rating=4.4)]
+2025-06-19 19:33 - INFO - wrapper - main_file_handler invoked with parameters positional arguments ([Params(name='iphone 1 pro', brand='apple', price=999, rating=4.9), Params(name='galaxy s23 ultra', brand='samsung', price=2199, rating=4.8), Params(name='redmi note 12', brand='xiaomi', price=199, rating=4.6), Params(name='poco x5 pro', brand='xiaomi', price=299, rating=4.4)], Namespace(file='products.csv', where=None, aggregate='rating=min', order_by=None)) and keyword arguments {}. Result = 
+[[4.4]]
+2025-06-19 19:33 - INFO - wrapper - order_by_and_pretify invoked with parameters positional arguments ([[4.4]], Namespace(file='products.csv', where=None, aggregate='rating=min', order_by=None), ['name', 'brand', 'price', 'rating']) and keyword arguments {}. Result = 
+|   rating |
+|----------|
+|      4.4 |
