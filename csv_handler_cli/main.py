@@ -29,6 +29,7 @@ def prepare_data(file_path: Path) -> List[namedtuple]:
 
 @logger_decorator
 def main_file_handler(data: List[namedtuple], parser_arguments: Namespace) -> list|List[list]:
+    try:
         if parser_arguments.where:
             name, condition, value = prepare_args(parser_arguments.where)
             condition = operator_map.get(condition)
@@ -43,7 +44,10 @@ def main_file_handler(data: List[namedtuple], parser_arguments: Namespace) -> li
             return [[condition([elem._asdict().get(name) for elem in data])]]
         else:
             return [elem for elem in data]
+    except ValueError:
+        raise ValueError("Please check carefully your input parameters")
 
+@logger_decorator
 def order_by_and_pretify(sequence: list, parser_arguments: Namespace, headers: str|None) -> str:
     if parser_arguments.order_by:
         name, _ , value = prepare_args(parser_arguments.order_by)
@@ -61,24 +65,27 @@ def order_by_and_pretify(sequence: list, parser_arguments: Namespace, headers: s
 
 @logger_decorator
 def arguments_error_validation(parser_arguments: Namespace) -> None:
-    if not parser_arguments.file:
-        raise Exception('Please provide valid path to a csv file')
-    if parser_arguments.aggregate and parser_arguments.where:
-        raise Exception('Sorry, but right now you can only filter out lines or aggregate them.')
-    if parser_arguments.aggregate:
-        name, condition, value = prepare_args(parser_arguments.aggregate)
-        if name not in ['price', 'rating'] or value not in ['avg', 'min', 'max']:
-            raise Exception('Not acceptable operator or name by which you intend to aggregate.')
-    if parser_arguments.where:
-        name, condition, value = prepare_args(parser_arguments.where)
-        if name not in ['price', 'rating'] and condition in ['>', '<']:
-            raise Exception('You can not filer out string lines with operators gt, lt.')
-    if parser_arguments.order_by:
+    try:
+        if not parser_arguments.file:
+            raise Exception('Please provide valid path to a csv file')
+        if parser_arguments.aggregate and parser_arguments.where:
+            raise Exception('Sorry, but right now you can only filter out lines or aggregate them.')
         if parser_arguments.aggregate:
-            raise Exception('Can\'t use order-by with aggregate flag.')
-        name, _, value = prepare_args(parser_arguments.order_by)
-        if name not in ['price', 'brand', 'rating', 'name'] or value not in ['desc', 'asc']:
-            raise Exception('Typo in parameters input. Please check order-by flag parameters.')
+            name, condition, value = prepare_args(parser_arguments.aggregate)
+            if name not in ['price', 'rating'] or value not in ['avg', 'min', 'max']:
+                raise Exception('Not acceptable operator or name by which you intend to aggregate.')
+        if parser_arguments.where:
+            name, condition, value = prepare_args(parser_arguments.where)
+            if name not in ['price', 'rating'] and condition in ['>', '<']:
+                raise Exception('You can not filer out string lines with operators gt, lt.')
+        if parser_arguments.order_by:
+            if parser_arguments.aggregate:
+                raise Exception('Can\'t use order-by with aggregate flag.')
+            name, _, value = prepare_args(parser_arguments.order_by)
+            if name not in ['price', 'brand', 'rating', 'name'] or value not in ['desc', 'asc']:
+                raise Exception('Typo in parameters input. Please check order-by flag parameters.')
+    except ValueError:
+        raise ValueError("Please check carefully your input parameters")
 
 def main():
     packed_data = prepare_data(csv_file_path)
