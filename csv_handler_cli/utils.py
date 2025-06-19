@@ -7,13 +7,13 @@ import logging
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)  # Set minimum log level
 file_handler = logging.FileHandler(f"csv_handler_cli/app.log", mode="a", encoding="utf-8")
-logger.addHandler(file_handler)
 formatter = logging.Formatter(
    "{asctime} - {levelname} - {funcName} - {message}",
     style="{",
     datefmt="%Y-%m-%d %H:%M",
 )
 file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
 
 operator_map = {
     '=': operator.eq,
@@ -32,6 +32,6 @@ def logger_decorator(func):
     def wrapper(*args, **kwargs):
         result = func(*args, **kwargs)
         logger.info(msg=f'{func.__name__} invoked with parameters positional arguments {args} '
-                        f'and keyword arguments {kwargs}. Result = {result}')
+                        f'and keyword arguments {kwargs}. Result = \n{result}')
         return result
     return wrapper
