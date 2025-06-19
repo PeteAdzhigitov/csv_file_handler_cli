@@ -9,13 +9,14 @@ from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
 from csv_handler_cli.utils import operator_map, prepare_args
 from csv_handler_cli.utils import logger_decorator
+from typing import List
 
 headers = None
 
 @logger_decorator
-def main_file_handler(file_path, parser_arguments: Namespace) -> list:
+def prepare_data(file_path: Path) -> List[namedtuple]:
     with open(file_path) as file:
-        result = []
+        packed_data = []
         read_lines = csv.reader(file)
         # Csv file first line = headers
         global headers
@@ -23,7 +24,11 @@ def main_file_handler(file_path, parser_arguments: Namespace) -> list:
         # Packing our csv lines into namedtuples for further easier work with attributes
         pack = namedtuple('Params', 'name, brand, price, rating')
         for line in read_lines:
-            result.append(pack(name=line[0], brand=line[1], price=int(line[2]), rating=float(line[3])))
+            packed_data.append(pack(name=line[0], brand=line[1], price=int(line[2]), rating=float(line[3])))
+        return packed_data
+
+@logger_decorator
+def main_file_handler(data: List[namedtuple], parser_arguments: Namespace) -> list|List[list]:
         if parser_arguments.where:
             name, condition, value = prepare_args(parser_arguments.where)
             condition = operator_map.get(condition)
@@ -31,15 +36,15 @@ def main_file_handler(file_path, parser_arguments: Namespace) -> list:
                 value = int(value)
             elif name == 'rating':
                 value = float(value)
-            return [elem for elem in result if condition(elem._asdict().get(name), value)]
+            return [elem for elem in data if condition(elem._asdict().get(name), value)]
         elif parser_arguments.aggregate:
             name, condition, value = prepare_args(parser_arguments.aggregate)
             condition = operator_map.get(value)
-            return [[condition([elem._asdict().get(name) for elem in result])]]
+            return [[condition([elem._asdict().get(name) for elem in data])]]
         else:
-            return [elem for elem in result]
+            return [elem for elem in data]
 
-def order_by_and_pretify(sequence: list, parser_arguments, headers) -> str:
+def order_by_and_pretify(sequence: list, parser_arguments: Namespace, headers: str|None) -> str:
     if parser_arguments.order_by:
         name, _ , value = prepare_args(parser_arguments.order_by)
         if value == 'desc':
@@ -75,9 +80,9 @@ def arguments_error_validation(parser_arguments: Namespace) -> None:
         if name not in ['price', 'brand', 'rating', 'name'] or value not in ['desc', 'asc']:
             raise Exception('Typo in parameters input. Please check order-by flag parameters.')
 
-
 def main():
-    output = main_file_handler(csv_file_path, parser_arguments)
+    packed_data = prepare_data(csv_file_path)
+    output = main_file_handler(packed_data, parser_arguments)
     print(order_by_and_pretify(output, parser_arguments, headers))
 
 if __name__ == '__main__':
