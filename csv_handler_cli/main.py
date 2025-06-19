@@ -7,7 +7,7 @@ import tabulate
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
-from csv_handler_cli.utils import operator_map, prepare_args
+from csv_handler_cli.utils import operator_map, prepare_args, recursively_sort_data, logger
 from csv_handler_cli.utils import logger_decorator
 from typing import List
 
@@ -28,6 +28,16 @@ def prepare_data(file_path: Path) -> List[namedtuple]:
         return packed_data
 
 @logger_decorator
+def sort_data(data: List[namedtuple], parser_arguments: Namespace) -> List[namedtuple]:
+    if parser_arguments.where:
+        name, _, _ = prepare_args(parser_arguments.where)
+        if name in ['name', 'brand']:
+            return sorted([elem for elem in data], key=lambda elem: elem.name)
+        elif name in ['rating', 'price']:
+            return recursively_sort_data(data, name)
+    return data
+
+@logger_decorator
 def main_file_handler(data: List[namedtuple], parser_arguments: Namespace) -> list|List[list]:
     try:
         if parser_arguments.where:
@@ -44,7 +54,8 @@ def main_file_handler(data: List[namedtuple], parser_arguments: Namespace) -> li
             return [[condition([elem._asdict().get(name) for elem in data])]]
         else:
             return [elem for elem in data]
-    except ValueError:
+    except ValueError as exs_info:
+        logger.error(msg=exs_info)
         raise ValueError("Please check carefully your input parameters")
 
 @logger_decorator
@@ -84,12 +95,17 @@ def arguments_error_validation(parser_arguments: Namespace) -> None:
             name, _, value = prepare_args(parser_arguments.order_by)
             if name not in ['price', 'brand', 'rating', 'name'] or value not in ['desc', 'asc']:
                 raise Exception('Typo in parameters input. Please check order-by flag parameters.')
-    except ValueError:
+    except ValueError as exc_info:
+        logger.error(msg=exc_info)
         raise ValueError("Please check carefully your input parameters")
+    except Exception as exc_info:
+        logger.error(msg=exc_info)
+        raise
 
 def main():
     packed_data = prepare_data(csv_file_path)
-    output = main_file_handler(packed_data, parser_arguments)
+    sorted_list = sort_data(packed_data, parser_arguments)
+    output = main_file_handler(sorted_list, parser_arguments)
     print(order_by_and_pretify(output, parser_arguments, headers))
 
 if __name__ == '__main__':

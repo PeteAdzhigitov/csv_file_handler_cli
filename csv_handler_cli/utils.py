@@ -5,13 +5,14 @@ import logging
 
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)  # Set minimum log level
+logger.setLevel(logging.DEBUG)  # Set minimum log level
 file_handler = logging.FileHandler(f"csv_handler_cli/app.log", mode="a", encoding="utf-8")
 formatter = logging.Formatter(
    "{asctime} - {levelname} - {funcName} - {message}",
     style="{",
     datefmt="%Y-%m-%d %H:%M",
 )
+file_handler.setLevel(logging.DEBUG)
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 
@@ -26,6 +27,14 @@ operator_map = {
 
 prepare_args = lambda argumets: re.split(r'([<>=])', argumets)
 
+def recursively_sort_data(data: list, parameter) -> list:
+    if len(data) < 1:
+        return data
+    median = data[len(data)//2]._asdict().get(parameter)
+    less = [elem for elem in data if elem._asdict().get(parameter) < median]
+    bigger = [elem for elem in data if elem._asdict().get(parameter) > median]
+    equal = [elem for elem in data if elem._asdict().get(parameter) == median]
+    return recursively_sort_data(bigger, parameter) + equal + recursively_sort_data(less, parameter)
 
 def logger_decorator(func):
     @functools.wraps(func)
