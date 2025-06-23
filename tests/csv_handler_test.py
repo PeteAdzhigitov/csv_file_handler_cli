@@ -1,10 +1,8 @@
 import random
-from collections import namedtuple
 import allure
 import pytest
 from conf import PROJECT_ROOT
 from csv_handler_cli.main import prepare_data, arguments_error_validation, sort_data, main_file_handler
-from typing import Union, List
 
 
 class TestCSVHandler:
@@ -70,3 +68,15 @@ class TestCSVHandler:
             with pytest.raises(Exception) as exc_info:
                 arguments_error_validation(parser_arguments)
             assert exc_info.type == Exception
+
+    @pytest.mark.parametrize('not_valid_args', [['--where', 'brand>apple'], ['--where', 'name<poco'],
+                                                ['--aggregate', 'brand=avg'], ['--aggregate', 'name=min'],
+                                                ['--aggregate', 'price=test'], ['--aggregate', 'rating=not_valid'],
+                                                ['--aggregate', 'rating=not_valid', '--order-by', 'price=desc'],
+                                                ['--order-by', 'priceless=desc'], ['--order-by', 'price=desckk']])
+    def test_arguments_error_validator_raise_error_when_arguments_not_valid(self, create_parser, not_valid_args):
+        list_of_arguemnts = ['--file', f'{PROJECT_ROOT}/tests/test_products.csv']
+        list_of_arguemnts.extend(not_valid_args)
+        parser_arguments = create_parser.parse_args(list_of_arguemnts)
+        with pytest.raises(Exception):
+            arguments_error_validation(parser_arguments)
