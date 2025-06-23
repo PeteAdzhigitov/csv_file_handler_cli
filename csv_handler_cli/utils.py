@@ -2,11 +2,12 @@ import functools
 import operator
 import re
 import logging
+from conf import PROJECT_ROOT
 
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)  # Set minimum log level
-file_handler = logging.FileHandler(f"csv_handler_cli/app.log", mode="a", encoding="utf-8")
+file_handler = logging.FileHandler(f"{PROJECT_ROOT}/csv_handler_cli/app.log", mode="a", encoding="utf-8")
 formatter = logging.Formatter(
    "{asctime} - {levelname} - {funcName} - {message}",
     style="{",

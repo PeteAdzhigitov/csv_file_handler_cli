@@ -1,12 +1,42 @@
 import random
-
+from collections import namedtuple
 import allure
 import pytest
 from conf import PROJECT_ROOT
-from csv_handler_cli.main import prepare_data, arguments_error_validation
+from csv_handler_cli.main import prepare_data, arguments_error_validation, sort_data, main_file_handler
+from typing import Union, List
 
 
 class TestCSVHandler:
+
+    @pytest.mark.parametrize('additional_args', [['--where', 'price>1'], ['--where', 'rating>1'],
+                                                 ['--aggregate', 'rating=min'],['--aggregate', 'price=avg']])
+    def test_main_handler_return_correct_data_type(self, create_parser, additional_args):
+        list_of_arguemnts = ['--file', f'{PROJECT_ROOT}/tests/test_products.csv']
+        list_of_arguemnts.extend(additional_args)
+        parser_arguments = create_parser.parse_args(list_of_arguemnts)
+        data = prepare_data(parser_arguments.file)
+        result = main_file_handler(data, parser_arguments)
+        if parser_arguments.where:
+            assert type(result) == list
+        else:
+            assert all(isinstance(sublist, list) for sublist in result)
+
+    @pytest.mark.parametrize('not_valid_args', [['--where', 'price!100'], ['--where', 'rating^100'],
+                                                ['--where', 'price-100'], ['--where', 'price 100']])
+    def test_exception_when_not_valid_operator_passed(self, create_parser, not_valid_args):
+        list_of_arguemnts = ['--file', f'{PROJECT_ROOT}/tests/test_products.csv']
+        list_of_arguemnts.extend(not_valid_args)
+        parser_arguments = create_parser.parse_args(list_of_arguemnts)
+        data = prepare_data(parser_arguments.file)
+        with pytest.raises(ValueError) as exc_info:
+            sort_data(data, parser_arguments)
+
+    def test_prepared_data_returns_named_tuple(self, create_parser):
+        parser_arguments = create_parser.parse_args(['--file', f'{PROJECT_ROOT}/tests/test_products.csv'])
+        data = prepare_data(parser_arguments.file)
+        data = random.choice(data)
+        assert hasattr(data, '_fields')
 
     def test_prepare_data_returns_output_with_minimum_arguments(self, create_parser, receive_list_out_test_csv):
         with allure.step("Preparing test data"):
