@@ -1,3 +1,4 @@
 .venv/
 poetry.lock
 .coverage
+csv_handler_cli/app.log
