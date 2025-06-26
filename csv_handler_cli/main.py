@@ -1,15 +1,15 @@
-import argparse
-from argparse import Namespace
 import csv
-from collections import namedtuple
-from tabulate import tabulate
-import tabulate
 import sys
+import argparse
+import tabulate
+from typing import List
 from pathlib import Path
+from tabulate import tabulate
+from argparse import Namespace
+from collections import namedtuple
+from csv_handler_cli.utils import logger_decorator
 sys.path.append(str(Path(__file__).parent.parent))
 from csv_handler_cli.utils import operator_map, prepare_args, recursively_sort_data, logger
-from csv_handler_cli.utils import logger_decorator
-from typing import List
 from custom_exceptions import FilePathNotProvided, FilterAndAggregateSimultaneousUsage, NotAcceptableOperatorOrName, \
                                OrderByAggregateFlagsConflict
 
@@ -81,7 +81,8 @@ class CSVFileHandler:
         if not parser_arguments.file:
             raise FilePathNotProvided('Please provide valid path to a csv file')
         if parser_arguments.aggregate and parser_arguments.where:
-            raise FilterAndAggregateSimultaneousUsage('Sorry, but right now you can only filter out lines or aggregate them.')
+            raise FilterAndAggregateSimultaneousUsage('Sorry, but right now you can only filter out lines or '
+                                                      'aggregate them.')
         if parser_arguments.aggregate:
             name, condition, value = prepare_args(parser_arguments.aggregate)
             if name not in ['price', 'rating'] or value not in ['avg', 'min', 'max']:
@@ -106,20 +107,25 @@ class CSVFileHandler:
         return headers
 
 def main():
+    # Creating new CSVFileHandler instance
     csv_file_handler = CSVFileHandler()
+    # Adding parser parameters
     parser = argparse.ArgumentParser(prog='csv_handler_cli',
                                      description='Csv files handler, with filtering and aggregation functionality.')
-
     parser.add_argument('--file', help='path to products csv file')
     parser.add_argument('--where', help='filter output out flag')
     parser.add_argument('--aggregate', help='aggregating price or rating flag')
     parser.add_argument('--order-by', help='ordering output by a field')
     parser_arguments = parser.parse_args()
+    # Validating parameters
     csv_file_handler.arguments_error_validation(parser_arguments)
     csv_file_path = Path(parser_arguments.file)
+    # Packing data into namedtuples
     packed_data = csv_file_handler.prepare_data(csv_file_path)
+    # Sorting list of namedtuples
     sorted_list = csv_file_handler.sort_data(packed_data, parser_arguments)
     output = csv_file_handler.main_file_handler(sorted_list, parser_arguments)
+    # Outputting data
     print(csv_file_handler.order_by_and_pretify(output, parser_arguments, csv_file_path))
 
 if __name__ == '__main__':
