@@ -10,8 +10,8 @@ sys.path.append(str(Path(__file__).parent.parent))
 from csv_handler_cli.utils import operator_map, prepare_args, recursively_sort_data, logger
 from csv_handler_cli.utils import logger_decorator
 from typing import List
-
-headers = None
+from custom_exceptions import FilePathNotProvided, FilterAndAggregateSimultaneousUsage, NotAcceptableOperatorOrName, \
+                               OrderByAggregateFlagsConflict
 
 @logger_decorator
 def prepare_data(file_path: Path) -> List[namedtuple]:
@@ -19,9 +19,8 @@ def prepare_data(file_path: Path) -> List[namedtuple]:
         packed_data = []
         read_lines = csv.reader(file)
         # Csv file first line = headers
-        global headers
         headers = next(read_lines)
-        # Packing our csv lines into namedtuples for further easier work with attributes
+        # Packing our csv lines into namedtuples for simpler work with attributes
         pack = namedtuple('Params', 'name, brand, price, rating')
         for line in read_lines:
             packed_data.append(pack(name=line[0], brand=line[1], price=int(line[2]), rating=float(line[3])))
@@ -59,7 +58,8 @@ def main_file_handler(data: List[namedtuple], parser_arguments: Namespace) -> li
         raise ValueError("Please check carefully your input parameters")
 
 @logger_decorator
-def order_by_and_pretify(sequence: list, parser_arguments: Namespace, headers: str|None) -> str:
+def order_by_and_pretify(sequence: list, parser_arguments: Namespace, file_path) -> str:
+    headers = _get_csv_file_headers(file_path)
     if parser_arguments.order_by:
         name, _ , value = prepare_args(parser_arguments.order_by)
         if value == 'desc':
@@ -76,37 +76,37 @@ def order_by_and_pretify(sequence: list, parser_arguments: Namespace, headers: s
 
 @logger_decorator
 def arguments_error_validation(parser_arguments: Namespace) -> None:
-    try:
-        if not parser_arguments.file:
-            raise Exception('Please provide valid path to a csv file')
-        if parser_arguments.aggregate and parser_arguments.where:
-            raise Exception('Sorry, but right now you can only filter out lines or aggregate them.')
+    if not parser_arguments.file:
+        raise FilePathNotProvided('Please provide valid path to a csv file')
+    if parser_arguments.aggregate and parser_arguments.where:
+        raise FilterAndAggregateSimultaneousUsage('Sorry, but right now you can only filter out lines or aggregate them.')
+    if parser_arguments.aggregate:
+        name, condition, value = prepare_args(parser_arguments.aggregate)
+        if name not in ['price', 'rating'] or value not in ['avg', 'min', 'max']:
+            raise NotAcceptableOperatorOrName('Not acceptable operator or name by which you intend to aggregate.')
+    if parser_arguments.where:
+        name, condition, value = prepare_args(parser_arguments.where)
+        if name not in ['price', 'rating'] and condition in ['>', '<']:
+            raise NotAcceptableOperatorOrName('You can not filer out string lines with operators gt, lt.')
+    if parser_arguments.order_by:
         if parser_arguments.aggregate:
-            name, condition, value = prepare_args(parser_arguments.aggregate)
-            if name not in ['price', 'rating'] or value not in ['avg', 'min', 'max']:
-                raise Exception('Not acceptable operator or name by which you intend to aggregate.')
-        if parser_arguments.where:
-            name, condition, value = prepare_args(parser_arguments.where)
-            if name not in ['price', 'rating'] and condition in ['>', '<']:
-                raise Exception('You can not filer out string lines with operators gt, lt.')
-        if parser_arguments.order_by:
-            if parser_arguments.aggregate:
-                raise Exception('Can\'t use order-by with aggregate flag.')
-            name, _, value = prepare_args(parser_arguments.order_by)
-            if name not in ['price', 'brand', 'rating', 'name'] or value not in ['desc', 'asc']:
-                raise Exception('Typo in parameters input. Please check order-by flag parameters.')
-    except ValueError as exc_info:
-        logger.error(msg=exc_info)
-        raise ValueError("Please check carefully your input parameters")
-    except Exception as exc_info:
-        logger.error(msg=exc_info)
-        raise
+            raise OrderByAggregateFlagsConflict('Can\'t use order-by with aggregate flag.')
+        name, _, value = prepare_args(parser_arguments.order_by)
+        if name not in ['price', 'brand', 'rating', 'name'] or value not in ['desc', 'asc']:
+            raise NotAcceptableOperatorOrName('Typo in parameters input. Please check order-by flag parameters.')
+
+def _get_csv_file_headers(file_path) -> list:
+    with open(file_path) as file:
+        read_lines = csv.reader(file)
+        # Csv file first line = headers
+        headers = next(read_lines)
+    return headers
 
 def main():
     packed_data = prepare_data(csv_file_path)
     sorted_list = sort_data(packed_data, parser_arguments)
     output = main_file_handler(sorted_list, parser_arguments)
-    print(order_by_and_pretify(output, parser_arguments, headers))
+    print(order_by_and_pretify(output, parser_arguments, csv_file_path))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(prog='csv_handler_cli',
